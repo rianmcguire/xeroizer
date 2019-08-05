@@ -18,6 +18,7 @@ module Xeroizer
     record :Account
     record :Allocation
     record :Attachment
+    record :BatchPayment
     record :BrandingTheme
     record :Contact
     record :ContactGroup
