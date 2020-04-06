@@ -18,6 +18,7 @@ module Xeroizer
         decimal       :rate_per_unit
         decimal       :normal_number_of_units
         decimal       :amount
+        decimal       :fixed_amount
 
       end
 
