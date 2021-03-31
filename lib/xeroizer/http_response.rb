@@ -127,21 +127,22 @@ module Xeroizer
 
     def raise_error!
       begin
-        error_details = JSON.parse(response.plain_body)
-        description  = error_details["Detail"]
+        plain_body    = response.plain_body
+        error_details = JSON.parse(plain_body)
+        description   = error_details["Detail"]
         case response.code.to_i
         when 400
-          raise Xeroizer::BadResponse.new(description)
+          raise Xeroizer::BadResponse.new(plain_body)
         when 401
-          raise OAuth::TokenExpired.new(description) if description.include?("TokenExpired")
-          raise OAuth::TokenInvalid.new(description)
+          raise OAuth::TokenExpired.new(plain_body) if description.include?("TokenExpired")
+          raise OAuth::TokenInvalid.new(plain_body)
         when 403
-          message = "Possible xero-tenant-id header issue. Xero Error: #{description}"
+          message = "Possible xero-tenant-id header issue. Xero Error: #{plain_body}"
           raise OAuth::Forbidden.new(message)
         when 404
           raise Xeroizer::ObjectNotFound.new(url)
         else
-          raise Xeroizer::OAuth::UnknownError.new(description)
+          raise Xeroizer::OAuth::UnknownError.new(plain_body)
         end
       rescue JSON::ParserError
         XmlErrorResponse.new(response, request_body, url).raise_error!
