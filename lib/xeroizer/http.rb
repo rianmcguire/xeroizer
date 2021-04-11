@@ -63,7 +63,7 @@ module Xeroizer
       params.merge!(unitdp_param(url))
 
       if method != :get
-        headers['Content-Type'] ||= "application/x-www-form-urlencoded"
+        headers['Content-Type'] ||= "application/xml"
       end
 
       content_type = params.delete(:content_type)
@@ -84,7 +84,7 @@ module Xeroizer
         headers['Accept'] = "application/xml"
       end
 
-      raw_body = params.delete(:raw_body) ? body : {:xml => body}
+      raw_body = params.delete(:raw_body) ? body : body
 
       if params.any?
         url += "?" + params.map {|key,value| "#{CGI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"}.join("&")
